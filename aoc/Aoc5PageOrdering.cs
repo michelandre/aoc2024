@@ -44,6 +44,16 @@ public class Aoc5PageOrdering
         var sum = u.Select(p.MiddlePage).Sum();
         Assert.That(sum, Is.EqualTo(143));
     }
+    
+    [Test]
+    public void SimpleTest2()
+    {
+        var p = PageOrdering.FromString(Test1);
+        var repaired = p.RepairInvalidUpdates();
+        var sum = repaired.Select(p.MiddlePage).Sum();
+        Assert.That(sum, Is.EqualTo(123));
+    }
+    
 
     [Test]
     public void Solution1()
@@ -52,6 +62,17 @@ public class Aoc5PageOrdering
         var u = p.ValidUpdates();
         var sum = u.Select(p.MiddlePage).Sum();
         TestContext.Out.WriteLine(sum);
+        Assert.That(sum, Is.EqualTo(4957));
+    }
+    
+    [Test]
+    public void Solution2()
+    {
+        var p = PageOrdering.FromString(Input1);
+        var repaired = p.RepairInvalidUpdates();
+        var sum = repaired.Select(p.MiddlePage).Sum();
+        TestContext.Out.WriteLine(sum);
+        Assert.That(sum, Is.EqualTo(6938));
     }
     private const string Input1 = """
                                   76|86

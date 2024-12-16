@@ -3,9 +3,9 @@ namespace aoc;
 public class PageOrdering
 {
     private List<(int Page, int MustBeBefore)> _rules = new List<(int Page, int MustBeBefore)>();
-    List<int[]> _updates = new List<int[]>();
+    List<int[]> _updates = [];
 
-    enum ParseState
+    private enum ParseState
     {
         Rule,
         Update
@@ -48,7 +48,7 @@ public class PageOrdering
     {
         var result = new List<int>();
         for(var i = 0; i < _updates.Count; i++)
-            if (IsValidUpdate(i))
+            if (InvalidIndexes(i).Length == 0)
                 result.Add(i);
         return result.ToArray();
     }
@@ -57,16 +57,52 @@ public class PageOrdering
     {
         return _updates[updateIndex][ _updates[updateIndex].Length / 2];
     }
-    
-    bool IsValidUpdate(int index)
+
+    public int[] RepairInvalidUpdates()
+    {
+        var u = InvalidIndexes();
+        foreach (var i in u)
+        {
+            var invalid = i.Item2;
+            do
+            {
+                Swap(i.Update, invalid[0].I1, invalid[0].I2);
+                invalid = InvalidIndexes(i.Update);
+            } while (invalid.Length > 0);
+        }
+        return u.Select(i => i.Update).ToArray();
+    }
+
+    private int[] Swap(int updateIndex, int i1, int i2)
+    {
+        var update = _updates[updateIndex];
+        (update[i1], update[i2]) = (update[i2], update[i1]);
+        return update;
+    }
+        
+    public (int Update, (int I1, int I2)[])[] InvalidIndexes()
+    {
+        var result = new List<(int Update, (int I1, int I2)[])>();
+        for (var i = 0; i < _updates.Count; i++)
+        {
+            var invalid = InvalidIndexes(i);
+            if (invalid.Length > 0)
+                result.Add((Update: i, invalid));
+        } 
+        
+        return result.ToArray();
+    }
+
+    private (int I1, int I2)[] InvalidIndexes(int index)
     {
         var update = _updates[index];
-        var rm = _rules.Select(
-            r =>
-                Tuple.Create(
-                    Array.IndexOf(update, r.Page),
-                    Array.IndexOf(update, r.MustBeBefore)))
-            .Where(t => t.Item1 != -1 && t.Item2 != -1);
-        return rm.All(t => t.Item1 < t.Item2);
+        var rm = _rules.Select(r => (
+                I1: Array.IndexOf(update, r.Page), 
+                I2: Array.IndexOf(update, r.MustBeBefore)))
+            .Where(t => t.I1 != -1 && t.I2 != -1 && t.I1 > t.I2);
+        var result = rm.ToArray();
+        Array.Sort(result, (a, b) => (a.I2 - a.I1) - (b.I2 - b.I1));
+        return result;
     }
+   
 }
