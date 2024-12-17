@@ -16,8 +16,24 @@ public readonly record struct Position(int Row, int Col)
     public static readonly Position East = new Position(0, -1);      // -1, -1
     
     public static readonly Position None = new Position(int.MinValue, int.MinValue);
-    
+
+    public Position ToRight() => Position.TurnRight(this);
+    public Position ToLeft() => Position.TurnLeft(this);
+    public override string ToString()
+    {
+        return DirChar(this) == '?' ? $"({Row},{Col})" : $"{DirChar(this)}";
+    }
+
     public static Position TurnRight(Position d)
+    {
+        if (d == North) return East;
+        if (d == West) return North;
+        if (d == South) return West;
+        if (d == East) return South;
+        throw new ArgumentOutOfRangeException(nameof(d), d, "Direction not recognized");
+    }
+    
+    public static Position TurnLeft(Position d)
     {
         if (d == North) return West;
         if (d == West) return South;
@@ -35,6 +51,5 @@ public readonly record struct Position(int Row, int Col)
         return '?';
     }
     
-    public override string ToString() => $"({Row},{Col})";
     
 }
