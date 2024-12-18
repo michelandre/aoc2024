@@ -6,7 +6,6 @@ public class GardenPlot(char[,] input)
 
     public static GardenPlot FromString(string input)
     {
-        var reader = new StringReader(input);
         var lines = input.Split(
             ["\r\n", "\r", "\n"],
             StringSplitOptions.None
