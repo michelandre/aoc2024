@@ -108,7 +108,7 @@ public class GardenPlot(char[,] input)
         {
             return _plot[row, col];
         }
-        catch (IndexOutOfRangeException e)
+        catch (IndexOutOfRangeException)
         {
             return '.';
         }
