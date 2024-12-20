@@ -8,8 +8,6 @@ public class MemoryGrid(char[,] input, Position[] corrupted)
 {
     private readonly char[,] _grid = input;
     private readonly Position[] _corrupted = corrupted;
-    private readonly Position _start;
-    private readonly Position _end;
 
     private const char Empty = '.';
     private const char Corrupt = '#';

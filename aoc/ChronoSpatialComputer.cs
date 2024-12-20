@@ -80,7 +80,7 @@ public class ChronoSpatialComputer
         {
             _registers[reg] = _registers[A] / (int)Math.Pow(2, _registers[operand]);
         }
-        catch (DivideByZeroException e)
+        catch (DivideByZeroException)
         {
             _registers[reg] = int.MaxValue;
         }

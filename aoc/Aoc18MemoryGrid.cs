@@ -81,7 +81,7 @@ public class Aoc18MemoryGrid
         m.CorruptGrid(1024);
         var path = m.ShortestPath(new Position(0, 0), new Position(70, 70));
         // Remove head/start from path
-        TestContext.WriteLine(path[1..].Length);
+        TestContext.Out.WriteLine(path[1..].Length);
         Assert.That(path[1..], Has.Length.EqualTo(372));
     }
     
